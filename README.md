@@ -1,4 +1,3 @@
-[![Build Status](https://img.shields.io/circleci/project/rackspace-cookbooks/chef-slack_handler/master.svg)](https://circleci.com/gh/rackspace-cookbooks/chef-slack_handler)
 
 # Description
 
@@ -109,9 +108,42 @@ node['chef_client']['handler']['slack']['webhooks']['webhook1']['send_environmen
 node['chef_client']['handler']['slack']['webhooks']['webhook1']['send_organization'] = true
 ```
 
+# Pinnacle 21 Fork
+
+Extending beyond the original, `chef-slack_handler` can also publish custom messages from your recipe's resources to chef.
+ Simply extend any resource and define a `message` method on the resource instance, and if the resource runs the message
+ will be posted to Slack. Usage example:
+
+```
+template '/etc/cron.d/some_job' do
+  source 'something.erb'
+  @message = " - *enabled* some cron job on `#{node.name}`"
+  singleton_class.class_eval { attr_reader 'message' }
+end
+
+# Check if updates are needed and update Node attributes
+ruby_block 'report on something' do
+  block do
+    @data = gather_some_data_or_whatever
+    def self.message
+      @data
+    end
+  end
+end
+
+```
+
+The Slack message would then comtain 
+
+> " - *enabled* some cron job on `#{node.name}`"
+
+As well as whatever string `gather_some_data_or_whatever` method returned. (Implementation of that method left up to the reader)
+
 # Credits
 
 Borrowed everything from the `logstash_handler` cookbook [here](https://github.com/lusis/logstash_handler), who in turn borrowed quite a bit from the `graphite_handler` cookbook [here](https://github.com/realityforge-cookbooks/graphite_handler).
+
+Forked from Rackspace Hosting's version to add some new features 
 
 # License
 

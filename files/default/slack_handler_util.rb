@@ -60,13 +60,21 @@ class SlackHandlerUtil
   end
 
   def run_status_message_detail(context = {})
+    messages = ["\n"]
     updated_resources = @run_status.updated_resources
-    elapsed_time = @run_status.elapsed_time.round
-    case context['message_detail_level'] || @default_config[:message_detail_level]
-    when "elapsed"
-      ". #{updated_resources.count} resources updated in #{elapsed_time} seconds." unless updated_resources.nil?
-    when "resources"
-      ". #{updated_resources.count} resources updated in #{elapsed_time} seconds:\n#{updated_resources.join(', ')}" unless updated_resources.nil?
+    begin
+      messages += updated_resources.filter {|r| r.respond_to? :message }.map &:message
+    rescue => err
+      puts "Exception in slack_handler: #{err} #{err.full_message}"
     end
+    elapsed_time = @run_status.elapsed_time.round
+    messages <<
+      case context['message_detail_level'] || @default_config[:message_detail_level]
+      when "elapsed"
+        "#{updated_resources.count} resources updated in #{elapsed_time} seconds." unless updated_resources.nil?
+      when "resources"
+        "#{updated_resources.count} resources updated in #{elapsed_time} seconds:\n#{updated_resources.join(', ')}" unless updated_resources.nil?
+      end
+    messages.join "\n"
   end
 end
