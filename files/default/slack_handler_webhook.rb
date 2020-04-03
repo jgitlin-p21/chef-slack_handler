@@ -72,6 +72,7 @@ class Chef::Handler::Slack < Chef::Handler
   def report_chef_run_end(webhook)
     if @run_status.success?
       return false if @util.fail_only(webhook)
+      return false if @util.only_if_messages(webhook) and @util.no_messages?
       slack_message(" :white_check_mark: #{@util.end_message(webhook)}", webhook['url'], webhook['channel'])
     else
       slack_message(" :skull: #{@util.end_message(webhook)}", webhook['url'], webhook['channel'], run_status.exception)

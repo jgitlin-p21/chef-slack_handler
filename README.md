@@ -82,6 +82,8 @@ node['chef_client']['handler']['slack']['icon_emoji'] = ':fork_and_knife:'
 
 # Only report when runs fail as opposed to every single occurrence, defaults to false
 node['chef_client']['handler']['slack']['fail_only'] = true
+# Only report when resources have messages
+node['chef_client']['handler']['slack']['only_if_messages'] = false
 # Send a message when the run starts, defaults to false
 node['chef_client']['handler']['slack']['send_start_message'] = true
 # The level of detail in the message. Valid options are 'basic', 'elapsed' and 'resources', defaults to 'basic'
@@ -133,11 +135,14 @@ end
 
 ```
 
-The Slack message would then comtain 
+The Slack message would then contain 
 
 > " - *enabled* some cron job on `#{node.name}`"
 
 As well as whatever string `gather_some_data_or_whatever` method returned. (Implementation of that method left up to the reader)
+
+The `['chef_client']['handler']['slack']['only_if_messages']` attribute controls if a slack message should only
+be sent if any resources have a non-nil value for their `message` method, useful to reduce spam.
 
 # Credits
 

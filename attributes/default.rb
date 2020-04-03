@@ -45,6 +45,8 @@ default['chef_client']['handler']['slack']['message_detail_level'] = 'basic'
 default['chef_client']['handler']['slack']['cookbook_detail_level'] = 'off'
 # Only report failures
 default['chef_client']['handler']['slack']['fail_only'] = false
+# Only report when resources have messages
+default['chef_client']['handler']['slack']['only_if_messages'] = false
 # Whether to send a message to when the Chef run starts
 default['chef_client']['handler']['slack']['send_start_message'] = false
 # Whether to send a message the node.chef_environment as well as the node.name

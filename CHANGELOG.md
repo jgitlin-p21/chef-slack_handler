@@ -1,5 +1,11 @@
 # Changelog
 
+
+## 1.1.0
+
+- Pinnacle 21 fork: Add support for resources to add custom messages
+- Added the `node['chef_client']['handler']['slack']['only_if_messages']` attribute
+
 ## 1.0.0
 
 - Add support for windows and chef-client 14+

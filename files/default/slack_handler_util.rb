@@ -19,6 +19,15 @@ class SlackHandlerUtil
     @default_config[:fail_only]
   end
 
+  def only_if_messages(context = {})
+    return context['only_if_messages'] unless context['only_if_messages'].nil?
+    @default_config[:only_if_messages]
+  end
+
+  def no_messages?
+    resources_with_messages.count == 0
+  end
+
   def send_on_start(context = {})
     return context['send_start_message'] unless context['send_start_message'].nil?
     @default_config[:send_start_message]
@@ -59,11 +68,19 @@ class SlackHandlerUtil
     end
   end
 
+  def resources_with_messages
+    @run_status.updated_resources.filter {|r| r.respond_to?(:message) && r.message }
+  end
+
+  def resource_messages
+    resources_with_messages.map &:message
+  end
+
   def run_status_message_detail(context = {})
     messages = ["\n"]
     updated_resources = @run_status.updated_resources
     begin
-      messages += updated_resources.filter {|r| r.respond_to? :message }.map &:message
+      messages += resource_messages
     rescue => err
       puts "Exception in slack_handler: #{err} #{err.full_message}"
     end

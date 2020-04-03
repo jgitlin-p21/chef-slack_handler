@@ -81,6 +81,7 @@ class Chef::Handler::Slack < Chef::Handler
   def report_chef_run_end
     if run_status.success?
       return false if @util.fail_only
+      return false if @util.only_if_messages and @util.no_messages?
       slack_message("#{@util.end_message(run_status)} \n #{run_status.exception}", run_status.node.name)
     else
       slack_message(@util.end_message(run_status).to_s, run_status.node.name)
