@@ -5,7 +5,7 @@ maintainer_email 'jgitlin@pinnacle21.com'
 license          'Apache-2.0'
 description      'Installs/Configures a Chef handler for reporting results to a Slack channel.'
 
-version          '1.1.0'
+version          '1.1.1'
 
 supports 'ubuntu'
 supports 'centos'

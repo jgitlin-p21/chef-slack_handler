@@ -10,7 +10,7 @@ class SlackHandlerUtil
   end
 
   def end_message(context = {})
-    "Chef run #{run_status_human_readable} on #{node_details(context)}" \
+    "Chef run #{run_status_human_readable} on #{node_details(context)} " \
     "#{run_status_cookbook_detail(context)}#{run_status_message_detail(context)}"
   end
 
@@ -80,7 +80,7 @@ class SlackHandlerUtil
     messages = ["\n"]
     updated_resources = @run_status.updated_resources
     begin
-      messages += resource_messages
+      messages += resource_messages.map {|m| " • #{m}"}
     rescue => err
       puts "Exception in slack_handler: #{err} #{err.full_message}"
     end

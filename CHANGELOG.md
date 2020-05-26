@@ -1,6 +1,10 @@
 # Changelog
 
 
+## 1.1.1
+
+- Put node messages into a bulleted list
+
 ## 1.1.0
 
 - Pinnacle 21 fork: Add support for resources to add custom messages
